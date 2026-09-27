@@ -4,28 +4,72 @@ Both DRC and ERC report violations on this design. **Most are artifacts of the
 conversion or of upstream design choices, not defects.** This document separates them
 so nobody "fixes" a working board.
 
-## DRC — 115 violations, 20 unconnected
+## DRC — 106 violations, 1 unconnected
 
-Measured on the CLI-imported board with KiCad default rules. Counts shift slightly
-after the GUI import and after filling zones.
+Measured on the GUI-imported board with zones filled and KiCad default rules.
 
 ### Not bugs
 
 | Finding | Count | Why |
 |---|---|---|
-| `shorting_items`, `clearance` on SJ1 / SJ2 | 1 + 4 | **The solder jumpers working as designed.** `SOLDERJUMPER_CLOSEDWIRE`'s `WIRE` pad deliberately bridges pads 1 and 2 — that is what makes it a normally-closed jumper. KiCad has no concept of an Eagle solder jumper. |
 | `silk_overlap`, `silk_over_copper` | 68 | Eagle tolerated silkscreen over pads; KiCad's defaults do not. Upstream shipped this way. |
-| `solder_mask_bridge` | 22 | Fine-pitch parts against KiCad's default mask rules. |
-| `copper_edge_clearance` | 8 | Connector mounting tabs at 0.32–0.36 mm against KiCad's default 0.5 mm. Adafruit's own rules were looser. |
+| `solder_mask_bridge` | 25 | Fine-pitch parts against KiCad's default mask rules. |
+| `clearance` on SJ1 (pad 1 / WIRE, pad 2 / WIRE) | 2 | **The solder jumper working as designed.** `SOLDERJUMPER_CLOSEDWIRE` has a netless `WIRE` pad that deliberately bridges pads 1 and 2 — that is what makes it normally-closed. See *Solder jumpers* below. |
 | `items_not_allowed` | 2 | The mounting-hole pads sitting inside their own imported keepout. |
-| `via_dangling` | 6 | Stitching vias. |
-| `unconnected_items` | 20 | **Zones are unfilled.** Press `B` in the PCB editor; most clear. |
+| `text_thickness`, `text_height` | 4 | Silkscreen text below KiCad's default minimums. |
 
 ### Worth attention
 
-- Design rules and net classes did not carry over. Board Setup is at KiCad defaults,
-  which are *stricter* than what this board was manufactured to. Set real
-  trace/via/clearance minimums before using DRC output to judge the layout.
+- **`shorting_items` + 2 `clearance` involving net `N$4` — orphan copper inherited from
+  upstream.** In the Eagle source, signal `N$4` has **zero contactrefs** and exactly one
+  wire segment. It is a 0.635 mm dangling stub on the bottom layer that overlaps SJ2's
+  pad 2 (`VDD`) and runs within 0.076 mm of the `VBAT` trace. Electrically it is just an
+  appendix hanging off the VDD pad and goes nowhere, so the board works — but it is
+  stray copper, not intentional design. Deleting it is safe and clears all three
+  violations.
+
+- **1 unconnected: an isolated GND island on F.Cu.** The top-layer GND pour fills as
+  three islands. Two are properly stitched; the third (~2.33 mm², roughly
+  X 150.4–154.6, Y 105.1–107.2, between X3 and CONN3) contains **no GND via and no GND
+  pad**, so it is floating copper. Harmless at this size and frequency, but fix it by
+  adding a stitching via, or set the zone's island removal to drop sub-threshold
+  islands.
+
+- **2 `starved_thermal`.** JP2 pad 2 (GND, B.Cu) and X3 pad 4 (GND, F.Cu) each get one
+  thermal spoke where KiCad's default rule wants two. Upstream had no such rule. X3's
+  exposed pad is also tied to GND, so that one is immaterial.
+
+- **Design rules and net classes did not carry over.** Board Setup is at KiCad defaults,
+  which are *stricter* than what this board was manufactured to. Set real trace/via/
+  clearance minimums before using DRC output to judge the layout.
+
+### Zone fill
+
+Zones must be filled before DRC output means anything. Filling took unconnected items
+from 20 to 1 and cleared all 6 `via_dangling` findings. If a checkout shows them
+unfilled, press `B` in the PCB editor and re-run DRC before reading anything into the
+counts above.
+
+## Solder jumpers
+
+KiCad models solder jumpers perfectly well — it ships 30 footprints in `Jumper.pretty`
+(including `SolderJumper-2_P1.3mm_Bridged_*`) and 11 symbols in `Jumper.kicad_sym`
+(`SolderJumper_2_Bridged`, `SolderJumper_3_Bridged12`, …). The everyday idiom is the
+same as a **0 ohm resistor**: a two-pin part bridging two nets.
+
+The difference is how the bridge is drawn. KiCad's bridged jumpers have **only two
+pads** and no copper between them — the short is a solder blob the assembler adds, so
+nothing overlaps and DRC stays quiet. Adafruit's Eagle footprint instead adds a **third
+netless `WIRE` pad** physically overlapping pads 1 and 2, which KiCad reads as two
+zero-clearance violations.
+
+So the noise is a property of *this imported footprint*, not a gap in KiCad. Options:
+
+1. **Leave it.** The violations are cosmetic; the board is correct.
+2. **Give the `WIRE` pad a net** so it stops being a foreign object between two pads.
+3. **Rebuild SJ1 as a KiCad solder jumper** (`SolderJumper_2_Bridged` +
+   `SolderJumper-2_P1.3mm_Bridged_*`) or a 0 ohm resistor. Cleanest long term, but it
+   replaces Adafruit's footprint — see [`footprints.md`](footprints.md) before doing it.
 
 ## ERC — 39 violations
 
