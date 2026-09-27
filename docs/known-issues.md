@@ -4,7 +4,7 @@ Both DRC and ERC report violations on this design. **Most are artifacts of the
 conversion or of upstream design choices, not defects.** This document separates them
 so nobody "fixes" a working board.
 
-## DRC — 106 violations, 1 unconnected
+## DRC — 96 violations, 1 unconnected
 
 Measured on the GUI-imported board with zones filled and KiCad default rules.
 
@@ -13,27 +13,27 @@ Measured on the GUI-imported board with zones filled and KiCad default rules.
 | Finding | Count | Why |
 |---|---|---|
 | `silk_overlap`, `silk_over_copper` | 68 | Eagle tolerated silkscreen over pads; KiCad's defaults do not. Upstream shipped this way. |
-| `solder_mask_bridge` | 25 | Fine-pitch parts against KiCad's default mask rules. |
+| `solder_mask_bridge` | 18 | Fine-pitch parts against KiCad's default mask rules. |
 | `clearance` on SJ1 (pad 1 / WIRE, pad 2 / WIRE) | 2 | **The solder jumper working as designed.** `SOLDERJUMPER_CLOSEDWIRE` has a netless `WIRE` pad that deliberately bridges pads 1 and 2 — that is what makes it normally-closed. See *Solder jumpers* below. |
 | `items_not_allowed` | 2 | The mounting-hole pads sitting inside their own imported keepout. |
 | `text_thickness`, `text_height` | 4 | Silkscreen text below KiCad's default minimums. |
 
 ### Worth attention
 
-- **`shorting_items` + 2 `clearance` involving net `N$4` — orphan copper inherited from
-  upstream.** In the Eagle source, signal `N$4` has **zero contactrefs** and exactly one
-  wire segment. It is a 0.635 mm dangling stub on the bottom layer that overlaps SJ2's
-  pad 2 (`VDD`) and runs within 0.076 mm of the `VBAT` trace. Electrically it is just an
-  appendix hanging off the VDD pad and goes nowhere, so the board works — but it is
-  stray copper, not intentional design. Deleting it is safe and clears all three
-  violations.
-
 - **1 unconnected: an isolated GND island on F.Cu.** The top-layer GND pour fills as
   three islands. Two are properly stitched; the third (~2.33 mm², roughly
   X 150.4–154.6, Y 105.1–107.2, between X3 and CONN3) contains **no GND via and no GND
-  pad**, so it is floating copper. Harmless at this size and frequency, but fix it by
-  adding a stitching via, or set the zone's island removal to drop sub-threshold
-  islands.
+  pad**, so it is floating copper.
+
+  **A stitching via does not fit.** The island is 4.21 x 2.09 mm but narrow — the
+  largest via pad that clears all neighbouring copper by the board minimum (0.2032 mm)
+  is **0.496 mm diameter**, at (151.06, 106.36). The board's standard via is 0.889 mm
+  pad / 0.4826 mm drill, and even a 0.5 mm pad / 0.25 mm drill fails. A via small enough
+  would need a sub-0.2 mm drill. Don't retry this.
+
+  Remaining options: leave it (harmless floating copper at this size and frequency),
+  set the zone's island-removal threshold so KiCad drops sub-area islands on refill, or
+  move R2 / reroute to open up room — which changes Adafruit's layout.
 
 - **2 `starved_thermal`.** JP2 pad 2 (GND, B.Cu) and X3 pad 4 (GND, F.Cu) each get one
   thermal spoke where KiCad's default rule wants two. Upstream had no such rule. X3's
@@ -42,6 +42,17 @@ Measured on the GUI-imported board with zones filled and KiCad default rules.
 - **Design rules and net classes did not carry over.** Board Setup is at KiCad defaults,
   which are *stricter* than what this board was manufactured to. Set real trace/via/
   clearance minimums before using DRC output to judge the layout.
+
+### Fixed
+
+- **Orphan `N$4` copper stub — removed.** In the Eagle source, signal `N$4` had **zero
+  contactrefs** and exactly one wire segment: a 0.635 mm dangling stub on B.Cu that
+  overlapped SJ2's pad 2 (`VDD`) and ran within 0.076 mm of the `VBAT` trace. It was
+  stray copper inherited from upstream, not intentional design. Deleting it cleared the
+  `shorting_items` violation and 2 `clearance` violations (4 -> 2, leaving only the two
+  SJ1 solder-jumper ones). Total went 106 -> 96; `solder_mask_bridge` also moved 25 ->
+  18 in the same edit, which is reproducible but not fully explained — the cleared
+  pairs name SJ1/SJ2 mask polygons rather than `N$4` itself.
 
 ### Zone fill
 
