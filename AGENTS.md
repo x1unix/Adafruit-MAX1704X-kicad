@@ -108,6 +108,7 @@ Adafruit-MAX17048-STEMMA-eagle-import.kicad_sym   project symbol library
 sym-lib-table                         registers the symbol library
 3dmodels/                             project-local STEP files, ${KIPRJMOD}/3dmodels/
 docs/                                 conversion knowledge + datasheet
+CLAUDE.md                             defers to this file
 ```
 
 Not worth committing: `*.lck`, `*.kicad_prl`, `.history/`, `fp-info-cache`.
