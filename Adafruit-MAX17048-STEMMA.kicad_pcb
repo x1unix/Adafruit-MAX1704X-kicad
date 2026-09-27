@@ -16690,6 +16690,17 @@
 			(uuid "f69543dc-5469-4e81-83be-50e562238d0e")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/3dmodels/MAX17048G-T10--3DModel-STEP-510211.STEP"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 0)
+			)
+		)
 	)
 	(footprint "0603-NO"
 		(layer "F.Cu")
