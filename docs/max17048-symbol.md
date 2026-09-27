@@ -5,7 +5,7 @@ wiring compensates. The copper is correct. Do not "fix" this by rewiring.**
 
 ## The datasheet
 
-`MAX17048G+T10`, TDFN-8 2 x 2 mm (Maxim outline 21-0268):
+`MAX17048G+T10`, TDFN-8 2 x 2 mm (package outline 21-0168):
 
 ```
 [ 1 ] CTG      SDA [ 8 ]

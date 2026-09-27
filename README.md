@@ -20,7 +20,7 @@ and is not maintained by Adafruit.
 
 | | |
 |---|---|
-| Fuel gauge IC | **MAX17048G+T10** — TDFN-8, 2 x 2 mm, 0.5 mm pitch (Maxim outline 21-0268) |
+| Fuel gauge IC | **MAX17048G+T10** — TDFN-8, 2 x 2 mm, 0.5 mm pitch (package outline 21-0168) |
 | Size | 25.40 x 20.32 mm (1.00 x 0.80 in) |
 | Stackup | 2 layer |
 | Interface | I2C, two STEMMA QT / Qwiic connectors (JST SH 4-pin) |

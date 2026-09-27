@@ -14,7 +14,7 @@ pad rotation separately (`rot="R90"`), which has to be applied before comparing.
 
 | Ref | Eagle footprint | Actual part | Match quality |
 |---|---|---|---|
-| X3 | `TDFN8_2X2MM` | **MAX17048G+T10**, TDFN-8 2x2 mm, 0.5 mm pitch, EP 0.8 x 1.38 mm (Maxim outline 21-0268) | KiCad equivalent: `TDFN-8-1EP_2x2mm_P0.5mm_EP0.8x1.2mm` |
+| X3 | `TDFN8_2X2MM` | **MAX17048G+T10**, TDFN-8 2x2 mm, 0.5 mm pitch, EP 0.8 x 1.38 mm (package outline 21-0168) | KiCad equivalent: `TDFN-8-1EP_2x2mm_P0.5mm_EP0.8x1.2mm` |
 | CONN3, CONN4 | `JST_SH4` | **JST SM04B-SRSS-TB**, SH series 1.0 mm, 4-pin, side-entry SMT (STEMMA QT / Qwiic) | Exact match to KiCad-official: 0.6 x 1.55 pins at 1 mm pitch, 1.2 x 1.8 tabs |
 | X1, X2 | `JSTPH2_BATT` | **JST S2B-PH-SM4-TB**, PH series 2.0 mm, 2-pin, side-entry SMT with tabs | Same part; Adafruit uses longer pin pads (4.6 vs 3.5 mm) and larger tabs |
 | R3 | `RESPACK_4X0603` | 4 x 0603 convex resistor array, 10K | Near-match to `R_Array_Convex_4x0603`; Adafruit's outer pads sit at 0.9 mm, stock is 0.8 mm, and the array runs along X rather than Y |
