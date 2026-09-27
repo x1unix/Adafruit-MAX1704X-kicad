@@ -1,0 +1,73 @@
+# ---- macOS ----
+.DS_Store
+.DS_Store?
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# ---- KiCad: lock files (present only while the project is open) ----
+*.lck
+~*.lck
+
+# ---- KiCad: local, per-user state (not part of the design) ----
+*.kicad_prl
+fp-info-cache
+
+# ---- KiCad: auto-backups and editor leftovers ----
+*-backups/
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_sym-bak
+*.kicad_pro-bak
+*.bak
+*.000
+*-save.kicad_pcb
+*-save.kicad_sch
+\#auto_saved_files#
+_autosave-*
+
+# ---- KiCad: netlist and rescue artifacts ----
+*.net
+*.cmp
+*-rescue.lib
+*-rescue.dcm
+*.xml
+
+# ---- Fabrication / export output (regenerate, don't commit) ----
+gerbers/
+jlcpcb/
+production/
+*.gbr
+*.gbrjob
+*.drl
+*.ps
+*.gz
+*.zip
+# 3D models: ignored everywhere EXCEPT the project-local 3dmodels/ dir.
+# Both cases are listed explicitly - gitignore matching is case-sensitive on
+# Linux, so lowercase-only patterns would leak an uppercase .STEP export.
+*.step
+*.stp
+*.wrl
+*.STEP
+*.STP
+*.WRL
+!3dmodels/**/*.step
+!3dmodels/**/*.stp
+!3dmodels/**/*.wrl
+!3dmodels/**/*.STEP
+!3dmodels/**/*.STP
+!3dmodels/**/*.WRL
+
+# ---- Editors / tooling ----
+.history/
+.vscode/
+.idea/
+*.swp
+*~
