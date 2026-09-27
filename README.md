@@ -28,7 +28,10 @@ and is not maintained by Adafruit.
 | Converted with | KiCad 10.0.5 |
 
 `MAX17048G+T10` decodes as: `MAX17048` 1-cell ModelGauge fuel gauge, `G` TDFN package,
-`+` lead-free, `T10` tape and reel. Datasheet is in [`docs/max17048-max17049.pdf`](docs/max17048-max17049.pdf).
+`+` lead-free, `T10` tape and reel. The I2C address is fixed at **`0x36`** (7-bit).
+
+Datasheet: [`docs/max17048-max17049.pdf`](docs/max17048-max17049.pdf), with a condensed
+markdown version at [`docs/max17048-datasheet.md`](docs/max17048-datasheet.md).
 
 ## Opening it
 
@@ -55,6 +58,7 @@ since been added; the remaining parts still have empty 3D slots. See
 
 | Document | Contents |
 |---|---|
+| [`docs/max17048-datasheet.md`](docs/max17048-datasheet.md) | Condensed MAX17048 datasheet — pinout, I2C address, registers, electrical limits |
 | [`docs/conversion.md`](docs/conversion.md) | How the conversion was performed, and what the importer did or didn't carry over |
 | [`docs/max17048-symbol.md`](docs/max17048-symbol.md) | The upstream SCL/SDA pin-label defect and why the board is still correct |
 | [`docs/footprints.md`](docs/footprints.md) | Footprint provenance and the real manufacturer part behind each one |

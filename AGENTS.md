@@ -9,6 +9,13 @@ A KiCad 10 port of Adafruit's EagleCAD project for the MAX17048 fuel gauge break
 **MAX17048G+T10** (TDFN-8, 2 x 2 mm). Read [`README.md`](README.md) first, then
 [`docs/`](docs/).
 
+**For anything about the chip itself** — pinout, I2C address, registers, electrical
+limits — use [`docs/max17048-datasheet.md`](docs/max17048-datasheet.md). It is a
+condensation of the official PDF written for agents to consume, so you don't have to
+parse 19 pages of scanned tables. The PDF
+([`docs/max17048-max17049.pdf`](docs/max17048-max17049.pdf)) remains authoritative for
+anything tolerance- or safety-critical.
+
 This is a hardware design, not software. There is no build, no test suite, and changes
 are verified with `kicad-cli` and by looking at the board.
 
@@ -27,7 +34,8 @@ the datasheet, not the pin names:**
 kicad-cli sch export netlist --format kicadxml -o /tmp/net.xml Adafruit-MAX17048-STEMMA.kicad_sch
 ```
 
-Full story: [`docs/max17048-symbol.md`](docs/max17048-symbol.md).
+Full story: [`docs/max17048-symbol.md`](docs/max17048-symbol.md); authoritative pinout
+in [`docs/max17048-datasheet.md`](docs/max17048-datasheet.md).
 
 ### 2. Preserve Adafruit's footprints
 
