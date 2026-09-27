@@ -72,8 +72,9 @@ reopen.
 
 The user scoped these out. They are known state, not pending bugs:
 
-- **3D models are not attached.** The Eagle source had none.
-  [`docs/3d-models.md`](docs/3d-models.md).
+- **Most 3D models are not attached.** The Eagle source had none. X3 (MAX17048) now
+  has one; the rest are empty slots, and only the JST S2B-PH-SM4-TB still needs
+  sourcing. [`docs/3d-models.md`](docs/3d-models.md).
 - **DRC and ERC report violations**, nearly all false positives or upstream choices.
   [`docs/known-issues.md`](docs/known-issues.md). Notably, DRC flags SJ1/SJ2 as shorting
   nets — those are solder jumpers doing their job.
