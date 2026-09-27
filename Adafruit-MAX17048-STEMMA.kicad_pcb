@@ -50760,14 +50760,6 @@
 		(net "VDD")
 		(uuid "a0c7fb9e-980a-4e6b-b5c1-3a3d6eddf370")
 	)
-	(segment
-		(start 148.2471 105.8926)
-		(end 147.6121 105.8926)
-		(width 0.2032)
-		(layer "B.Cu")
-		(net "N$4")
-		(uuid "3f2646a0-2674-465f-8cb9-a7a843855d6a")
-	)
 	(zone
 		(net "GND")
 		(layer "F.Cu")
